@@ -2,9 +2,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.TimeUnit;
 
 
 public class LoginTest {
@@ -14,6 +17,7 @@ public class LoginTest {
     public void preCondition(){
     wd = new ChromeDriver();
     wd.navigate().to("https://ilcarro.xyz/search");
+        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     wd.manage().window().maximize();
 
 }
@@ -24,7 +28,6 @@ public class LoginTest {
         log.click();
 
         //find e-mail input
-        //By.id("email")
         WebElement einput = wd.findElement(By.id("email"));
         einput.click();
         einput.clear();
@@ -37,13 +40,13 @@ public class LoginTest {
         pasInput.sendKeys("Nnoa12345$");
 
         //find Login-yalla button
-        WebElement yallaBtn=wd.findElement(By.xpath("//button[@type]"));
-        yallaBtn.click();
-
+        wd.findElement(By.xpath("//button[@type]")).click();
 
         //find OK button
-        WebElement okbtn=wd.findElement(By.xpath("//*[text()='Ok']"));
-        okbtn.click();
+        wd.findElement(By.xpath("//*[text()='Ok']")).click();
+
+
+        Assert.assertTrue(wd.findElement(By.xpath("//*[@href='/logout?url=%2Fsearch']")).isDisplayed());
 
     }
 
