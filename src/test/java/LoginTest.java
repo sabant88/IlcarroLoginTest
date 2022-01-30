@@ -10,17 +10,8 @@ import org.testng.annotations.Test;
 import java.util.concurrent.TimeUnit;
 
 
-public class LoginTest {
-    WebDriver wd;
+public class LoginTest extends TestBase{
 
-    @BeforeMethod
-    public void preCondition(){
-    wd = new ChromeDriver();
-    wd.navigate().to("https://ilcarro.xyz/search");
-        wd.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-    wd.manage().window().maximize();
-
-}
     @Test
     public void LoginPositiveTest(){
 
@@ -50,9 +41,36 @@ public class LoginTest {
 
     }
 
-    @AfterMethod
-    public void postCondition(){
-        wd.quit();
+
+
+    @Test
+    public void LoginPositiveTest2(){
+
+        String eMail="noa@gmail.com";
+        String password="Nnoa12345$";
+        openLoginForm();
+        fillLoginForm(eMail,password);
+        submitLogin();
+        click(By.xpath("//*[text()='Ok']"));
+
+        Assert.assertTrue(isElementPresent(By.xpath("//*[@href='/logout?url=%2Fsearch']")));
+
     }
+
+
+    @Test
+    public void LoginWrongPasswordTest(){
+        String eMail="noa@gmail.com";
+        String password="noa12345$";
+        openLoginForm();
+        fillLoginForm(eMail,password);
+        submitLogin();
+
+        Assert.assertTrue(isElementPresent(By.xpath("//h2[@class='message']")));
+
+    }
+
+
+
 
 }
