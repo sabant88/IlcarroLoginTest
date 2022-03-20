@@ -1,76 +1,72 @@
+import models.User;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
 
+public class LoginTest extends TestBase {
 
-public class LoginTest extends TestBase{
-
-    @Test
-    public void LoginPositiveTest(){
-
-        WebElement log=wd.findElement(By.linkText("Log in"));
-        log.click();
-
-        //find e-mail input
-        WebElement einput = wd.findElement(By.id("email"));
-        einput.click();
-        einput.clear();
-        einput.sendKeys("noa@gmail.com");
-
-        //find password input
-        WebElement pasInput=wd.findElement(By.id("password"));
-        pasInput.click();
-        pasInput.clear();
-        pasInput.sendKeys("Nnoa12345$");
-
-        //find Login-yalla button
-        wd.findElement(By.xpath("//button[@type]")).click();
-
-        //find OK button
-        wd.findElement(By.xpath("//*[text()='Ok']")).click();
-
-
-        Assert.assertTrue(wd.findElement(By.xpath("//*[@href='/logout?url=%2Fsearch']")).isDisplayed());
-
+    @BeforeMethod
+    public void preConditionMethod() {
+        if (app.getUserHelper().isLogged()) {
+            app.getUserHelper().logOut();
+        }
     }
 
-
-
     @Test
-    public void LoginPositiveTest2(){
+    public void LoginPositiveTest() {
+        loger.info("Login Positive Test");
+        User user = new User().setWitheMail("noa@gmail.com").setPassword("Nnoa12345$");
+        loger.info("Login Positive Test");
 
-        String eMail="noa@gmail.com";
-        String password="Nnoa12345$";
-        openLoginForm();
-        fillLoginForm(eMail,password);
-        submitLogin();
-        click(By.xpath("//*[text()='Ok']"));
+        app.getUserHelper().openLoginForm();
+     //   app.getUserHelper().fillLoginForm("noa@gmail.com", "Nnoa12345$");
+        app.getUserHelper().fillLoginForm(user);
+        app.getUserHelper().submitLogin();
+        //  app.getUserHelper().okSubmit();
 
-        Assert.assertTrue(isElementPresent(By.xpath("//*[@href='/logout?url=%2Fsearch']")));
+
+        //  Assert.assertTrue(wd.findElement(By.xpath("//*[@href='/logout?url=%2Fsearch']")).isDisplayed());
+        Assert.assertTrue(app.getUserHelper().isLogged());
 
     }
 
 
     @Test
-    public void LoginWrongPasswordTest(){
-        String eMail="noa@gmail.com";
-        String password="noa12345$";
-        openLoginForm();
-        fillLoginForm(eMail,password);
-        submitLogin();
+    public void LoginPositiveTest2() {
 
-        Assert.assertTrue(isElementPresent(By.xpath("//h2[@class='message']")));
+        String eMail = "noa@gmail.com";
+        String password = "Nnoa12345$";
+        app.getUserHelper().openLoginForm();
+        app.getUserHelper().fillLoginForm(eMail, password);
+        app.getUserHelper().submitLogin();
+        //   app.getUserHelper().okSubmit();
+
+        //  Assert.assertTrue(isElementPresent(By.xpath("//*[@href='/logout?url=%2Fsearch']")));
+        Assert.assertTrue(app.getUserHelper().isLogged());
 
     }
 
 
+    @Test
+    public void LoginWrongPassword() {
+        String eMail = "noa@gmail.com";
+        String password = "noa12345";
+        app.getUserHelper().openLoginForm();
+        app.getUserHelper().fillLoginForm(eMail, password);
+        app.getUserHelper().submitLogin();
+
+        //   Assert.assertTrue(isElementPresent(By.xpath("//h2[@class='message']")));
+        Assert.assertFalse(app.getUserHelper().isLogged());
+
+    }
+
+    @AfterMethod
+    public void postCondition() {
+        app.getUserHelper().okSubmit();
+    }
 
 
 }

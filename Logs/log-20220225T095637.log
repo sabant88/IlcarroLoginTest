@@ -1,0 +1,5 @@
+7136 [Test worker] INFO  manager.ApplicationManager - all tests starts at Chrome Browser
+12143 [Test worker] INFO  TestBase - Test name---->LoginPositiveTest
+22240 [Test worker] INFO  TestBase - Login Positive Test
+22243 [Test worker] INFO  TestBase - Login Positive Test
+24836 [Test worker] INFO  TestBase - End of testLoginPositiveTest
